@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Robot Car App</string>
+    <string name="open">Abierto</string>
+    <string name="close">Cerrado</string>
+    <string name="Connected">Conectado</string>
+    <string name="Not_connected">No conectado</string>
+    <string name="Start">Empezar</string>
+    <string name="Stop">Detener</string>
+    <string name="Line_Tracking">Seguimiento de línea</string>
+    <string name="Auto_Control">Control automático</string>
+</resources>

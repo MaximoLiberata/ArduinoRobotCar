@@ -1,0 +1,8 @@
+{
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.default.includePath": [
+        "C:\\Program Files\\Arduino\\libraries\\**",
+        "C:\\Users\\Max\\Documents\\Arduino\\libraries\\**"
+    ]
+}
