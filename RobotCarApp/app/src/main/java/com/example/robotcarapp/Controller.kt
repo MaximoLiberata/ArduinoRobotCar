@@ -46,12 +46,12 @@ class Controller: Fragment(R.layout.controller) {
             if (lineTrackingStarted) {
                 lineTrackingStarted = false;
                 btnLineTracking.background.setTint(ContextCompat.getColor(view.context, R.color.green))
-                BluetoothService.SendCommand("5")
+                BluetoothService.sendCommand("5")
             }
             else {
                 lineTrackingStarted = true;
                 btnLineTracking.background.setTint(ContextCompat.getColor(view.context, R.color.red))
-                BluetoothService.SendCommand("4")
+                BluetoothService.sendCommand("4")
             }
         }
 
@@ -59,12 +59,12 @@ class Controller: Fragment(R.layout.controller) {
             if (autoControl) {
                 autoControl = false;
                 btnAutoControl.background.setTint(ContextCompat.getColor(view.context, R.color.green))
-                BluetoothService.SendCommand("7")
+                BluetoothService.sendCommand("7")
             }
             else {
                 autoControl = true;
                 btnAutoControl.background.setTint(ContextCompat.getColor(view.context, R.color.red))
-                BluetoothService.SendCommand("6")
+                BluetoothService.sendCommand("6")
             }
 
         }
@@ -87,7 +87,7 @@ class Controller: Fragment(R.layout.controller) {
                     timer = Timer()
 
                     timer?.scheduleAtFixedRate(timerTask {
-                        BluetoothService.SendCommand("$mmCommand-")
+                        BluetoothService.sendCommand("$mmCommand-")
                     }, 0, 100)
 
                     return true

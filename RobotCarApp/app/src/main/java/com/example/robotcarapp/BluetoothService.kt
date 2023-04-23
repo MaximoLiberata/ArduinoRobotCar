@@ -8,13 +8,13 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
+import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.*
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import java.util.concurrent.ExecutorService
@@ -27,8 +27,8 @@ class BluetoothService {
 
         private var MY_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         var bluetoothAdapter: BluetoothAdapter? = null
-        var bluetoothSocket: BluetoothSocket? = null
-        var bluetoothManager: BluetoothManager? = null
+        private var bluetoothSocket: BluetoothSocket? = null
+        private var bluetoothManager: BluetoothManager? = null
         var deviceSelected: BluetoothDevice? = null
 
         fun initializeBluetoothManager (activity: Activity?) {
@@ -38,13 +38,12 @@ class BluetoothService {
 
         fun getPairedDeviceList (activity: Activity): ArrayList<BluetoothDevice> {
 
-            if (ContextCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ) != -1/*PackageManager.PERMISSION_GRANTED*/
-            ) {
+            val grantedCode: Int = if (android.os.Build.VERSION.SDK_INT < 30) -1 else PackageManager.PERMISSION_GRANTED
+
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) !== grantedCode) {
                 return ArrayList()
             }
+
             val pairedDevices = bluetoothAdapter!!.bondedDevices
             val bluetoothDevices: ArrayList<BluetoothDevice> = ArrayList()
 
@@ -59,14 +58,14 @@ class BluetoothService {
         }
 
         @SuppressLint("MissingPermission")
-        fun Connect(device: BluetoothDevice, activity: Activity, itemView: View) {
+        fun connect(device: BluetoothDevice, activity: Activity, itemView: View) {
 
             val alertDialog = AlertDialog.Builder(activity)
             alertDialog.setTitle("Bluetooth")
 
             if (isConnected()) {
 
-                Disconnect()
+                disconnect()
 
                 if (deviceSelected != null && deviceSelected?.address != device.address) {
 
@@ -121,30 +120,30 @@ class BluetoothService {
 
         }
 
-        fun Disconnect() {
+        private fun disconnect() {
 
             if (bluetoothSocket != null) {
 
                 try {
                     bluetoothSocket!!.close()
                     bluetoothSocket = null
-                } catch (e: IOException) { }
+                } catch (_: IOException) { }
 
             }
 
         }
 
-        fun isConnected (): Boolean {
+        private fun isConnected (): Boolean {
             return bluetoothSocket?.isConnected ?: false
         }
 
-        fun SendCommand(text: String) {
+        fun sendCommand(text: String) {
 
             if (bluetoothSocket != null) {
 
                 try {
                     bluetoothSocket?.outputStream?.write(text.toByteArray(Charsets.UTF_8))
-                } catch (e: IOException) { }
+                } catch (_: IOException) { }
 
             }
 
@@ -153,7 +152,7 @@ class BluetoothService {
         fun read (): Int? {
             try {
                 return bluetoothSocket?.inputStream?.read()
-            } catch (e: IOException) { null }
+            } catch (_: IOException) { }
 
             return null
         }

@@ -71,7 +71,7 @@ class CustomAdapter(private val bluetoothDevices: ArrayList<BluetoothDevice>) : 
                             cardBluetoothDevice.background.setTint(ContextCompat.getColor(itemView.context, R.color.grey_1))
 
                             if (x == event.x && y == event.y && (currentTime + 200) >= System.currentTimeMillis()) {
-                                BluetoothService.Connect(device, itemView.context as Activity, itemView)
+                                BluetoothService.connect(device, itemView.context as Activity, itemView)
                             }
 
                             return true
